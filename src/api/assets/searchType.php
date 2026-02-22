@@ -6,9 +6,10 @@ if (isset($_POST['other_instances_id'])) {
     //Check user has permission to transfer assets in this instance 
     if (!$AUTH->instancePermissionCheck("ASSETS:TRANSFER")) die("403");
     //Check other instance exists for this user
-    if (array_search($_POST['other_instances_id'], array_column($AUTH->data['instances'], 'instances_id')) === false) die("404");
+    $otherInstanceIndex = array_search($_POST['other_instances_id'], array_column($AUTH->data['instances'], 'instances_id'));
+    if ($otherInstanceIndex === false) die("404");
     //check user has permission in other instance 
-    if (!in_array("ASSETS:TRANSFER", $AUTH->data['instances'][array_search($_POST['other_instances_id'], array_column($AUTH->data['instances'], 'instances_id'))]['permissions'])) die("403");
+    if (!in_array("ASSETS:TRANSFER", $AUTH->data['instances'][$otherInstanceIndex]['permissions'])) die("403");
 
     $DBLIB->where("(assetTypes.instances_id IS NULL OR assetTypes.instances_id = ?)", [$_POST['other_instances_id']]);
 } else {
