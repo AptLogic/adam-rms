@@ -62,22 +62,22 @@
                 <div id="addNewTypeGroup" style="display: none;">
                     <label>Details</label>
                     <div class="input-group">
-                        <div class="input-group-prepend"><span class="input-group-text">Name</span></div>
+                        <div class="input-group-prepend"><label class="input-group-text" for="addNewType-name">Name</label></div>
                         <input type="text" class="form-control" name="assetTypes_name" id="addNewType-name" />
                     </div>
                     <div class="input-group">
-                        <div class="input-group-prepend"><span class="input-group-text">Description</span></div>
+                        <div class="input-group-prepend"><label class="input-group-text" for="addNewType-description">Description</label></div>
                         <textarea class="form-control" rows="3" name="assetTypes_description" id="addNewType-description"  placeholder=""></textarea>
                     </div>
                     <div class="input-group">
-                        <div class="input-group-prepend"><span class="input-group-text">Product Link</span></div>
+                        <div class="input-group-prepend"><label class="input-group-text" for="addNewType-productLink">Product Link</label></div>
                         <input type="url" class="form-control" name="assetTypes_productLink" id="addNewType-productLink" maxlength="499" />
                     </div>
                     <div class="input-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">
+                            <label class="input-group-text" for="addNewType-mass">
                               Mass
-                            </span>
+                            </label>
                         </div>
                         <input type="number" step="0.001" min="0" name="assetTypes_mass" class="form-control" id="addNewType-mass" />
                         <div class="input-group-append">
@@ -86,18 +86,18 @@
                     </div>
                     <div class="input-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">
+                            <label class="input-group-text" for="addNewType-value">
                               Value - {{ moneySymbol() }}
-                            </span>
+                            </label>
                         </div>
                         <input type="number" step="0.001" min="0" name="assetTypes_value" class="form-control" id="addNewType-value" />
                     </div>
 
                     <div class="input-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">
+                            <label class="input-group-text" for="addNewType-dayRate">
                               Day Rate - {{ moneySymbol() }}
-                            </span>
+                            </label>
                         </div>
                         <input type="number" step="0.001" min="0" name="assetTypes_dayRate" class="form-control" id="addNewType-dayRate" />
                         <div class="input-group-append">
@@ -106,9 +106,9 @@
                     </div>
                     <div class="input-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">
+                            <label class="input-group-text" for="addNewType-weekRate">
                               Weekly Rate - {{ moneySymbol() }}
-                            </span>
+                            </label>
                         </div>
                         <input type="number" step="0.001" min="0" name="assetTypes_weekRate" class="form-control" id="addNewType-weekRate" />
                         <div class="input-group-append">
@@ -131,8 +131,8 @@
 
                 </div>
                     <div class="input-group" id="assetNotes" style="display:none;">
-                    <div class="input-group-prepend"><span class="input-group-text">Asset Notes</span></div>
-                    <textarea class="form-control" rows="2" name="assets_notes" placeholder=""></textarea>
+                    <div class="input-group-prepend"><label class="input-group-text" for="assets_notes_input">Asset Notes</label></div>
+                    <textarea class="form-control" rows="2" name="assets_notes" id="assets_notes_input" placeholder=""></textarea>
                 </div>
                 <div class="input-group definableFieldsGroup" data-fieldcount="1">
                     <div class="input-group-prepend"><span class="input-group-text definableFieldsLabel" data-fieldcount="1"></span></div>
