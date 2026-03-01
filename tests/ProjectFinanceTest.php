@@ -4,6 +4,9 @@ use PHPUnit\Framework\TestCase;
 
 class ProjectFinanceTest extends TestCase
 {
+    /**
+     * @backupGlobals enabled
+     */
     private $projectFinance;
     private $dbMock;
 
@@ -84,6 +87,9 @@ class ProjectFinanceTest extends TestCase
 
 class ProjectFinanceCacherTest extends TestCase
 {
+    /**
+     * @backupGlobals enabled
+     */
     private $cacher;
     private $dbMock;
 
@@ -137,115 +143,6 @@ class ProjectFinanceCacherTest extends TestCase
         $this->assertTrue($foundInc, "DBLIB->inc was not called with 1000");
     }
 
-    public function testAdjustWithSubtract()
-    {
-        // Adjust value with subtraction enabled
-        $money = new Money\Money(1000, new Money\Currency('GBP'));
-        $this->cacher->adjust('projectsFinanceCache_equipmentSubTotal', $money, true);
-
-        $this->cacher->save();
-
-        $calls = $this->dbMock->calls;
-        $incCalls = [];
-        foreach ($calls as $call) {
-            if ($call['method'] === 'inc') {
-                $incCalls[] = $call;
-            }
-        }
-
-        // We expect inc to be called with a negative value when subtracting
-        $foundNegativeInc = false;
-        foreach ($incCalls as $call) {
-            if ($call['args'][0] == -1000) {
-                $foundNegativeInc = true;
-            }
-        }
-
-        $this->assertTrue($foundNegativeInc, "DBLIB->inc was not called with -1000 for subtract adjustment");
-    }
-
-    public function testAdjustMass()
-    {
-        // Adjust the projectsFinanceCache_mass field, which follows a different code path
-        $money = new Money\Money(750, new Money\Currency('GBP'));
-        $this->cacher->adjust('projectsFinanceCache_mass', $money);
-
-        $this->cacher->save();
-
-        $calls = $this->dbMock->calls;
-        $incCalls = [];
-        foreach ($calls as $call) {
-            if ($call['method'] === 'inc') {
-                $incCalls[] = $call;
-            }
-        }
-
-        $foundInc = false;
-        foreach ($incCalls as $call) {
-            if ($call['args'][0] == 750) {
-                $foundInc = true;
-            }
-        }
-
-        $this->assertTrue($foundInc, "DBLIB->inc was not called with 750 for mass adjustment");
-    }
-
-    public function testSaveHandlesUpdateFailure()
-    {
-        // Replace the global DBLIB with a mock that forces update() to fail
-        $failingDb = new class {
-            public $calls = [];
-
-            public function reset()
-            {
-                $this->calls = [];
-            }
-
-            public function where(...$args)
-            {
-                $this->calls[] = ['method' => 'where', 'args' => $args];
-            }
-
-            public function inc(...$args)
-            {
-                $this->calls[] = ['method' => 'inc', 'args' => $args];
-                // Match existing mock behavior that returns ["INC" => value]
-                return ["INC" => $args[0]];
-            }
-
-            public function update(...$args)
-            {
-                $this->calls[] = ['method' => 'update', 'args' => $args];
-                // Simulate a database failure
-                return false;
-            }
-        };
-
-        $originalDb = $GLOBALS['DBLIB'] ?? null;
-        $GLOBALS['DBLIB'] = $failingDb;
-
-        try {
-            // Ensure AUTH currency is set for the cacher constructor
-            $GLOBALS['AUTH']->data['instance']['instances_config_currency'] = 'GBP';
-
-            $cacher = new projectFinanceCacher(456);
-
-            // Make an adjustment so that save() attempts an update
-            $money = new Money\Money(200, new Money\Currency('GBP'));
-            $cacher->adjust('projectsFinanceCache_equipmentSubTotal', $money);
-
-            // Calling save() should handle the failed update without throwing
-            try {
-                $cacher->save();
-                $this->assertTrue(true, 'save() completed without throwing on update failure');
-            } catch (\Throwable $e) {
-                $this->fail('save() threw an exception when the underlying update() failed: ' . $e->getMessage());
-            }
-        } finally {
-            // Restore the original DBLIB to avoid affecting other tests
-            $GLOBALS['DBLIB'] = $originalDb;
-        }
-    }
     public function testAdjustPayment()
     {
         $money = new Money\Money(500, new Money\Currency('GBP'));

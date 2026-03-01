@@ -34,12 +34,21 @@ $GLOBALS['AUTH']->login = true;
 
 // Mock Config class
 class Config {
-    public $CONFIG_MISSING_VALUES = [];
-    public function getConfigArray() {
-        return $GLOBALS['CONFIG'];
+    public array $CONFIG_STRUCTURE = [];
+    public array $CONFIG_MISSING_VALUES = [];
+    protected array $DBCACHE = [];
+
+    public function __construct()
+    {
+        $this->DBCACHE = $GLOBALS['CONFIG'];
     }
-    public function get($key) {
-        return isset($GLOBALS['CONFIG'][$key]) ? $GLOBALS['CONFIG'][$key] : null;
+
+    public function getConfigArray(): array {
+        return $this->DBCACHE;
+    }
+
+    public function get(string $key) {
+        return isset($this->DBCACHE[$key]) ? $this->DBCACHE[$key] : null;
     }
 }
 $GLOBALS['CONFIGCLASS'] = new Config();

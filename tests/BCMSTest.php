@@ -4,6 +4,9 @@ use PHPUnit\Framework\TestCase;
 
 class BCMSTest extends TestCase
 {
+    /**
+     * @backupGlobals enabled
+     */
     private $bCMS;
     private $dbMock;
 
@@ -37,13 +40,23 @@ class BCMSTest extends TestCase
 
     public function testRandomString()
     {
-        $result = $this->bCMS->randomString(10);
-        $this->assertEquals(10, strlen($result));
+        // Test standard random string
+        $result = $this->bCMS->randomString(50);
+        $this->assertEquals(50, strlen($result));
         $this->assertMatchesRegularExpression('/^[a-zA-Z0-9]+$/', $result);
 
-        $resultStringOnly = $this->bCMS->randomString(10, true);
-        $this->assertEquals(10, strlen($resultStringOnly));
+        // Ensure at least one number is generated when stringonly=false
+        // By generating a long enough string, the probability of no numbers is effectively zero
+        $hasNumber = preg_match('/[0-9]/', $result);
+        $this->assertEquals(1, $hasNumber, "Random string did not contain numbers despite stringonly=false");
+
+        // Test string only
+        $resultStringOnly = $this->bCMS->randomString(50, true);
+        $this->assertEquals(50, strlen($resultStringOnly));
         $this->assertMatchesRegularExpression('/^[a-zA-Z]+$/', $resultStringOnly);
+
+        $hasNumberStringOnly = preg_match('/[0-9]/', $resultStringOnly);
+        $this->assertEquals(0, $hasNumberStringOnly, "Random string contained numbers despite stringonly=true");
     }
 
     public function testFormatSize()
