@@ -268,7 +268,7 @@
                                                                             </div>
                                                                             <div class="col-4 text-right">
                                                                                 <div class="input-group input-group-sm">
-                                                                                    <input type="number" class="form-control" placeholder="Qty" min="1" max="{{ asset.countAvailable }}" id="bulkAddQty{{ asset.assetTypes_id }}">
+                                                                                    <input type="number" class="form-control" placeholder="Qty" min="1" max="{{ asset.countAvailable }}" id="bulkAddQty{{ asset.assetTypes_id }}" aria-label="Quantity to add">
                                                                                     <div class="input-group-append">
                                                                                         <button class="btn btn-success bulkAddToBasketAssetTypeButton" type="button" data-assetTypeId="{{ asset.assetTypes_id }}" {% if asset.countAvailable < 1 %} disabled {% endif %}><i class="fas fa-plus"></i> Add</button>
                                                                                     </div>
