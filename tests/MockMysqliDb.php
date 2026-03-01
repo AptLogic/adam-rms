@@ -21,11 +21,6 @@ class MockMysqliDb
         return $this; // Return self for chaining by default
     }
 
-    public function where($prop, $value = null, $operator = null, $cond = 'AND')
-    {
-        $this->calls[] = ['method' => 'where', 'args' => func_get_args()];
-        return $this;
-    }
 
     public function getone($tableName, $columns = '*')
     {
@@ -74,13 +69,23 @@ class MockMysqliDb
 
     public function inc($value)
     {
-        // inc usually returns an array or object representing the increment operation
-        // For simplicity in mocking, we can just return the value or a special object
-        return ["INC" => $value];
+        // Mimic the real mysqli-database-class behavior:
+        // inc() returns a special array that the query builder interprets
+        // as an "increment by $value" operation when used in update/insert data.
+        $this->calls[] = ['method' => 'inc', 'args' => func_get_args()];
+        return ['[I]' => $value];
     }
 
+    /**
+     * Simplified escape helper used only in tests.
+     *
+     * NOTE: This implementation is NOT safe for production use. The real MysqliDb
+     * implementation must use prepared statements or mysqli_real_escape_string()
+     * for proper SQL escaping and to avoid multibyte character vulnerabilities.
+     */
     public function escape($string)
     {
+        // Intentionally uses addslashes() as a lightweight stand‑in for tests only.
         return addslashes($string);
     }
 

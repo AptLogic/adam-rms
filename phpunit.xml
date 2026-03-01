@@ -10,7 +10,7 @@
          beStrictAboutOutputDuringTests="true"
          cacheDirectory=".phpunit.cache">
     <testsuites>
-        <testsuite name="Project Finance">
+        <testsuite name="Core Library Tests">
             <directory>tests</directory>
         </testsuite>
     </testsuites>
