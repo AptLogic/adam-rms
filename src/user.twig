@@ -323,7 +323,7 @@
                                     <th>From</th>
                                     <th>To</th>
                                     {% if user.users_userid != USERDATA.users_userid and "PERMISSIONS:EDIT:USER_POSITION"|serverPermissions %}
-                                        <th></th>
+                                        <th><span class="sr-only">Actions</span></th>
                                     {% endif %}
                                 </tr>
                                 </thead>
@@ -466,7 +466,7 @@
                             <table class="table table-head-fixed">
                                 <tr>
                                     <th>Project</th>
-                                    <th></th>
+                                    <th><span class="sr-only">Actions</span></th>
                                     <th>Role</th>
                                 </tr>
                                 {% for project in user.crewAssignments %}
@@ -488,7 +488,7 @@
                             <table class="table table-head-fixed">
                                 <tr>
                                     <th>Project</th>
-                                    <th></th>
+                                    <th><span class="sr-only">Actions</span></th>
                                 </tr>
                                 {% for project in user.projectManagement %}
                                     <tr>
